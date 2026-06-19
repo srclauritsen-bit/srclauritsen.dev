@@ -159,7 +159,7 @@ body.home {
 
 .photo-wrap {
   margin: 18px auto 0;
-  max-width: 260px;
+  max-width: 320px;
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid rgba(59, 9, 35, 0.08);
@@ -244,7 +244,7 @@ body.home {
 
 @media (max-width: 720px) {
   .container { padding: 20px; }
-  .photo-wrap { max-width: 180px; }
+  .photo-wrap { max-width: 220px; }
 }
 
 @media print {
