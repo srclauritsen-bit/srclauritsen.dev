@@ -111,20 +111,6 @@ body.home {
 
 .nav a:hover { border-bottom: 2px solid var(--accent); }
 
-.nav a[href="identity.html"] {
-  background: var(--accent);
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 700;
-  padding-bottom: 6px;
-}
-
-.nav a[href="identity.html"]:hover {
-  background: #ff3d96;
-  border-bottom: none;
-}
-
 .card {
   background: var(--card);
   padding: 20px;
