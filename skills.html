@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Skills — Savannah Casares-Lauritsen</title>
+    <meta name="description" content="Skills — Savannah Casares-Lauritsen" />
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="name">Skills & Interests</h1>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="experience.html">Experience</a>
+          <a href="education.html">Education</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="games.html">Game</a>
+          <a href="jokes.html">Joke</a>
+          <a href="identity.html">My Identity</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Skills & Interests</h2>
+        <p><strong>Core Accounting:</strong> Ledger processing, AP/AR, reconciliations, invoice review, budget tracking, financial accuracy.</p>
+        <p><strong>Technical:</strong> Advanced Excel (lookups, pivot tables, formulas), PowerPoint, Word, Statista, IBISWorld, MarketLine.</p>
+        <p><strong>Soft Skills:</strong> Detail-oriented, strong communicator, fast learner, thrives under tight deadlines.</p>
+        <p><strong>Languages:</strong> English (native), French (native), Danish (advanced), Spanish (basic).</p>
+        <p><strong>Interests:</strong> Running, ballet, travel, reading.</p>
+      </section>
+      <section class="card">
+        <h2>Video</h2>
+        <p>This is a video of my favorite ballet, <strong>The Nutcracker</strong>. I love the music, the choreography, and the magical atmosphere of this performance.</p>
+        <div class="video-wrap" style="position:relative;padding-bottom:56.25%;padding-top:30px;height:0;overflow:hidden;">
+          <div class="video-preview" id="videoPreview">
+            <div>
+              <span class="play-icon">▶</span>
+              <p>Editor previews often block external video embeds. If autoplay is blocked, click the button below to start playback.</p>
+              <div style="margin-top:12px;">
+                <button id="videoPlayBtn" class="btn" style="background:var(--accent);color:#fff;padding:10px 16px;border-radius:8px;border:none;font-weight:700;">Play (muted)</button>
+              </div>
+            </div>
+          </div>
+          <div id="yt-player" style="position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+        </div>
+        <p id="videoFallback" style="margin-top:12px;color:var(--muted);font-size:0.95rem;">If the embedded video does not load in this preview, open it directly on YouTube using the button below.</p>
+        <a class="btn" href="https://www.youtube.com/watch?v=heNk-DuQLSA" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-top:12px;background:var(--accent);color:#fff;">Watch on YouTube</a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© Savannah Casares-Lauritsen</div>
+    </footer>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+      // Replace static iframe with YouTube IFrame API player and autoplay muted
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('yt-player', {
+          videoId: 'heNk-DuQLSA',
+          playerVars: {
+            rel: 0,
+            modestbranding: 1,
+            playsinline: 1,
+            autoplay: 1,
+            mute: 1,
+            controls: 1
+          },
+          events: {
+            'onReady': function(event) {
+              try { event.target.playVideo(); } catch (e) {}
+              var preview = document.getElementById('videoPreview');
+              if (preview) preview.style.display = 'none';
+            },
+            'onError': function() {
+              var preview = document.getElementById('videoPreview');
+              if (preview) preview.style.display = 'flex';
+            }
+          }
+        });
+      }
+      // Fallback: user-triggered play if autoplay blocked
+      document.addEventListener('click', function(e) {
+        if (e.target && e.target.id === 'videoPlayBtn') {
+          if (player && typeof player.playVideo === 'function') {
+            player.playVideo();
+            var preview = document.getElementById('videoPreview');
+            if (preview) preview.style.display = 'none';
+          } else {
+            // open YouTube as last resort
+            window.open('https://www.youtube.com/watch?v=heNk-DuQLSA', '_blank', 'noopener');
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

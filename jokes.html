@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Joke Generator — Savannah Casares-Lauritsen</title>
+    <meta name="description" content="Joke Generator — Savannah Casares-Lauritsen" />
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .joke-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 24px;
+        padding: 20px;
+      }
+      .joke-box {
+        background: linear-gradient(135deg, #ffe6f0, #fff0f6);
+        border: 2px solid var(--accent);
+        padding: 28px;
+        border-radius: 12px;
+        max-width: 500px;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 16px;
+        line-height: 1.6;
+        color: var(--text);
+        font-weight: 500;
+      }
+      .joke-setup {
+        margin-bottom: 12px;
+      }
+      .joke-punchline {
+        margin-top: 16px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .joke-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .joke-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 18px rgba(255, 77, 166, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="name">Joke Generator</h1>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="experience.html">Experience</a>
+          <a href="education.html">Education</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="skills.html">Skills</a>
+          <a href="games.html">Game</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Tell Me a Joke!</h2>
+        <div class="joke-container">
+          <div class="joke-box" id="jokeBox">
+            <div>Click the button to get started!</div>
+          </div>
+          <button class="joke-btn" id="mainBtn" onclick="getJoke()">Get a Joke</button>
+          <button class="joke-btn" id="answerBtn" onclick="showAnswer()" style="display: none;">Show Answer</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© Savannah Casares-Lauritsen</div>
+    </footer>
+
+    <script>
+      const jokes = [
+        {
+          setup: "Why did the scarecrow win an award?",
+          punchline: "Because he was outstanding in his field!"
+        },
+        {
+          setup: "Why don't scientists trust atoms?",
+          punchline: "Because they make up everything!"
+        },
+        {
+          setup: "What do you call a fake noodle?",
+          punchline: "An impasta!"
+        },
+        {
+          setup: "Why did the math book look sad?",
+          punchline: "Because it had too many problems!"
+        },
+        {
+          setup: "What do you call a bear with no teeth?",
+          punchline: "A gummy bear!"
+        },
+        {
+          setup: "Why don't eggs tell jokes?",
+          punchline: "They'd crack each other up!"
+        },
+        {
+          setup: "What did the ocean say to the beach?",
+          punchline: "Nothing, it just waved!"
+        },
+        {
+          setup: "Why is a computer cold?",
+          punchline: "Because it left its Windows open!"
+        },
+        {
+          setup: "What do you call cheese that isn't yours?",
+          punchline: "Nacho cheese!"
+        },
+        {
+          setup: "Why did the coffee file a police report?",
+          punchline: "It got mugged!"
+        },
+        {
+          setup: "What's the best thing about Switzerland?",
+          punchline: "I don't know, but the flag is a big plus!"
+        },
+        {
+          setup: "Why did the golfer bring two pairs of pants?",
+          punchline: "In case he got a hole in one!"
+        }
+      ];
+
+      let currentJoke = null;
+
+      function getJoke() {
+        currentJoke = jokes[Math.floor(Math.random() * jokes.length)];
+        const jokeBox = document.getElementById('jokeBox');
+        const answerBtn = document.getElementById('answerBtn');
+        jokeBox.innerHTML = `
+          <div>
+            <div class="joke-setup">${currentJoke.setup}</div>
+          </div>
+        `;
+        answerBtn.style.display = 'inline-block';
+      }
+
+      function showAnswer() {
+        if (!currentJoke) return;
+        const jokeBox = document.getElementById('jokeBox');
+        const answerBtn = document.getElementById('answerBtn');
+        jokeBox.innerHTML = `
+          <div>
+            <div class="joke-setup">${currentJoke.setup}</div>
+            <div class="joke-punchline">${currentJoke.punchline}</div>
+          </div>
+        `;
+        answerBtn.style.display = 'none';
+      }
+    </script>
+  </body>
+</html>

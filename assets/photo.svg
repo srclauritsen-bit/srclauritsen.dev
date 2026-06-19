@@ -1,0 +1,16 @@
+<svg viewBox="0 0 360 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Portrait placeholder</title>
+  <desc id="desc">A circular portrait placeholder with pink background.</desc>
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffd6e8"/>
+      <stop offset="100%" stop-color="#ffb3d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="360" height="450" rx="32" fill="url(#grad)" />
+  <circle cx="180" cy="145" r="90" fill="#fff0f6" stroke="#ff4da6" stroke-width="12"/>
+  <path d="M96 348c0-54 44-98 98-98s98 44 98 98" fill="#fff0f6" stroke="#ff4da6" stroke-width="12"/>
+  <circle cx="140" cy="140" r="16" fill="#ff4da6"/>
+  <circle cx="220" cy="140" r="16" fill="#ff4da6"/>
+  <path d="M140 190c14 18 42 18 56 0" stroke="#ff4da6" stroke-width="10" stroke-linecap="round" fill="none"/>
+</svg>

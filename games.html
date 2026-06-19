@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Game — Savannah Casares-Lauritsen</title>
+    <meta name="description" content="Game — Savannah Casares-Lauritsen" />
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      .game-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+      }
+      #snakeCanvas {
+        border: 2px solid var(--accent);
+        background: #faf8fb;
+        display: block;
+        margin: 0 auto;
+        border-radius: 8px;
+      }
+      .game-controls {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .game-btn {
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 12px;
+      }
+      .game-btn:hover {
+        opacity: 0.9;
+      }
+      .game-info {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        font-weight: 600;
+      }
+      .game-info span {
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="name">Game</h1>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="experience.html">Experience</a>
+          <a href="education.html">Education</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="skills.html">Skills</a>
+          <a href="jokes.html">Joke</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>Snake Game</h2>
+        <p>Use arrow keys or WASD to control the snake. Eat the food to grow. Don't hit the walls or yourself!</p>
+        
+        <div class="game-container">
+          <canvas id="snakeCanvas" width="400" height="400"></canvas>
+          
+          <div class="game-info">
+            <div>Score: <span id="score">0</span></div>
+            <div>High Score: <span id="highScore">0</span></div>
+          </div>
+          
+          <div class="game-controls">
+            <button class="game-btn" onclick="toggleGame()">Start/Pause</button>
+            <button class="game-btn" onclick="resetGame()">New Game</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© Savannah Casares-Lauritsen</div>
+    </footer>
+
+    <script>
+      const canvas = document.getElementById('snakeCanvas');
+      const ctx = canvas.getContext('2d');
+      const scoreDisplay = document.getElementById('score');
+      const highScoreDisplay = document.getElementById('highScore');
+
+      const gridSize = 20;
+      const tileCount = canvas.width / gridSize;
+
+      let snake = [{x: 10, y: 10}];
+      let food = {x: 15, y: 15};
+      let direction = {x: 1, y: 0};
+      let nextDirection = {x: 1, y: 0};
+      let score = 0;
+      let highScore = localStorage.getItem('snakeHighScore') || 0;
+      let gameRunning = false;
+      let gameLoop;
+
+      highScoreDisplay.textContent = highScore;
+
+      function drawGame() {
+        ctx.fillStyle = '#fff0f6';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw snake
+        for (let i = 0; i < snake.length; i++) {
+          ctx.fillStyle = '#ff4da6';
+          ctx.fillRect(
+            snake[i].x * gridSize + 1,
+            snake[i].y * gridSize + 1,
+            gridSize - 2,
+            gridSize - 2
+          );
+          
+          // Draw cute face on head
+          if (i === 0) {
+            ctx.fillStyle = 'white';
+            // Eyes
+            ctx.beginPath();
+            ctx.arc(snake[i].x * gridSize + 7, snake[i].y * gridSize + 7, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(snake[i].x * gridSize + 13, snake[i].y * gridSize + 7, 2, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Pupils
+            ctx.fillStyle = '#3b0923';
+            ctx.beginPath();
+            ctx.arc(snake[i].x * gridSize + 7, snake[i].y * gridSize + 7, 1, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(snake[i].x * gridSize + 13, snake[i].y * gridSize + 7, 1, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Smile
+            ctx.strokeStyle = '#3b0923';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(snake[i].x * gridSize + 10, snake[i].y * gridSize + 11, 3, 0, Math.PI);
+            ctx.stroke();
+          }
+        }
+
+        // Draw cupcake food
+        drawCupcake(food.x * gridSize, food.y * gridSize);
+      }
+
+      function drawCupcake(x, y) {
+        // Cupcake wrapper (brown)
+        ctx.fillStyle = '#8B6F47';
+        ctx.beginPath();
+        ctx.moveTo(x + 5, y + 10);
+        ctx.lineTo(x + 4, y + 15);
+        ctx.lineTo(x + 16, y + 15);
+        ctx.lineTo(x + 15, y + 10);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Cupcake frosting (light pink with swirl effect)
+        ctx.fillStyle = '#FFB6D9';
+        ctx.beginPath();
+        ctx.arc(x + 10, y + 7, 7, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Frosting highlight
+        ctx.fillStyle = '#FFC7E0';
+        ctx.beginPath();
+        ctx.arc(x + 8, y + 5, 3, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Cherry on top
+        ctx.fillStyle = '#FF69B4';
+        ctx.beginPath();
+        ctx.arc(x + 10, y + 4, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function updateGame() {
+        direction = nextDirection;
+        const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+
+        if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+          endGame();
+          return;
+        }
+
+        for (let i = 0; i < snake.length; i++) {
+          if (head.x === snake[i].x && head.y === snake[i].y) {
+            endGame();
+            return;
+          }
+        }
+
+        snake.unshift(head);
+
+        if (head.x === food.x && head.y === food.y) {
+          score++;
+          scoreDisplay.textContent = score;
+          food = {
+            x: Math.floor(Math.random() * tileCount),
+            y: Math.floor(Math.random() * tileCount)
+          };
+        } else {
+          snake.pop();
+        }
+      }
+
+      function endGame() {
+        gameRunning = false;
+        clearInterval(gameLoop);
+        if (score > highScore) {
+          highScore = score;
+          localStorage.setItem('snakeHighScore', highScore);
+          highScoreDisplay.textContent = highScore;
+        }
+        alert(`Game Over! Final Score: ${score}`);
+      }
+
+      function toggleGame() {
+        if (!gameRunning) {
+          gameRunning = true;
+          gameLoop = setInterval(() => {
+            updateGame();
+            drawGame();
+          }, 180);
+        } else {
+          gameRunning = false;
+          clearInterval(gameLoop);
+        }
+      }
+
+      function resetGame() {
+        snake = [{x: 10, y: 10}];
+        food = {x: 15, y: 15};
+        direction = {x: 1, y: 0};
+        nextDirection = {x: 1, y: 0};
+        score = 0;
+        scoreDisplay.textContent = score;
+        gameRunning = false;
+        clearInterval(gameLoop);
+        drawGame();
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (!gameRunning) return;
+        
+        switch(e.key.toLowerCase()) {
+          case 'arrowup':
+          case 'w':
+            if (direction.y === 0) nextDirection = {x: 0, y: -1};
+            e.preventDefault();
+            break;
+          case 'arrowdown':
+          case 's':
+            if (direction.y === 0) nextDirection = {x: 0, y: 1};
+            e.preventDefault();
+            break;
+          case 'arrowleft':
+          case 'a':
+            if (direction.x === 0) nextDirection = {x: -1, y: 0};
+            e.preventDefault();
+            break;
+          case 'arrowright':
+          case 'd':
+            if (direction.x === 0) nextDirection = {x: 1, y: 0};
+            e.preventDefault();
+            break;
+        }
+      });
+
+      drawGame();
+    </script>
+  </body>
+</html>

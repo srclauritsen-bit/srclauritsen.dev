@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>About — Savannah Casares-Lauritsen</title>
+    <meta name="description" content="About Savannah Casares-Lauritsen" />
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <h1 class="name">About</h1>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="experience.html">Experience</a>
+          <a href="education.html">Education</a>
+          <a href="leadership.html">Leadership</a>
+          <a href="skills.html">Skills</a>
+          <a href="games.html">Game</a>
+          <a href="jokes.html">Joke</a>
+          <a href="identity.html">My Identity</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="card">
+        <h2>About</h2>
+        <p>Undergraduate transfer student from the University of Bath to Brigham Young University with practical finance experience across internships and project consulting. Detail-oriented, strong communicator, and experienced with ledger processing, reconciliations, and budget tracking.</p>
+      </section>
+      <section class="card">
+        <h2>Places I've lived</h2>
+        <p>View an interactive Tableau visualization below. The direct embed URL is preloaded for your workbook.</p>
+        <div class="embed-controls" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <input id="tableauUrl" type="text" value="https://public.tableau.com/views/Countries-Webdev/Sheet1?:showVizHome=no&:embed=y" placeholder="https://public.tableau.com/views/YourWorkbook/SheetName" style="flex:1;padding:8px;border:1px solid rgba(59,9,35,0.08);border-radius:6px;min-width:220px;">
+          <button id="embedBtn" class="btn" style="padding:8px 14px;">Embed</button>
+          <button id="clearBtn" class="btn" style="padding:8px 14px;background:#fff;border:1px solid var(--accent);color:var(--accent);">Clear</button>
+        </div>
+        <p style="margin-top:8px;color:var(--muted);font-size:0.95rem;">Embed URL: <code>https://public.tableau.com/views/Countries-Webdev/Sheet1?:showVizHome=no&:embed=y</code></p>
+
+        <div id="embedWrap" style="margin-top:16px;">
+          <div id="embedNotice" style="color:var(--muted)">Some local preview tools may not display embedded Tableau content. Open this page in your browser to view the live viz.</div>
+          <div id="vizContainer" style="margin-top:12px;display:block;">
+            <iframe id="tableauFrame" src="https://public.tableau.com/views/Countries-Webdev/Sheet1?:showVizHome=no&:embed=y" width="100%" height="600" frameborder="0" allowfullscreen style="border:1px solid rgba(59,9,35,0.08);border-radius:8px;"></iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">© Savannah Casares-Lauritsen</div>
+    </footer>
+    <script>
+      function normalizeTableauUrl(url){
+        if(!url) return '';
+        try{
+          const u = new URL(url);
+          if(!u.hostname.includes('public.tableau.com')) return url;
+
+          // Convert profile/app share URLs to the /views/ embed pattern
+          // Example incoming: /app/profile/USER/viz/Workbook/Sheet1?publish=yes
+          if(u.pathname.includes('/app/profile/') && u.pathname.includes('/viz/')){
+            const after = u.pathname.split('/viz/')[1];
+            // Build embed URL: /views/<after>?[:params]
+            const base = 'https://public.tableau.com/views/' + after;
+            const params = u.search && u.search !== '?' ? u.search.replace('?','') + '&:showVizHome=no&:embed=y' : ':showVizHome=no&:embed=y';
+            return base + (params.startsWith(':') ? ('?' + params) : ('?' + params));
+          }
+
+          // If it's already a /views/ URL, ensure embed params are present
+          if(u.pathname.startsWith('/views')){
+            let search = u.search || '';
+            if(!search.includes('showVizHome')) search += (search ? '&' : '?') + ':showVizHome=no';
+            if(!search.includes('embed')) search += '&:embed=y';
+            return u.origin + u.pathname + search;
+          }
+
+          return url;
+        }catch(e){
+          return url;
+        }
+      }
+
+      // Keep the direct Tableau embed URL visible for the iframe.
+      document.addEventListener('DOMContentLoaded', function(){
+        const sample = 'https://public.tableau.com/views/Countries-Webdev/Sheet1?:showVizHome=no&:embed=y';
+        const input = document.getElementById('tableauUrl');
+        if(!input.value) input.value = sample;
+      });
+    </script>
+  </body>
+</html>
